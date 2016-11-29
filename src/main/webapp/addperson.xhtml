@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+	<title>Gestione persone</title>
+</h:head>
+<h:body>
+
+	<h:form>
+	
+	<f:subview id="addPersonSubview">
+		<h3>Inserisci una persona:</h3>
+		<div>
+			<label for="name">Nome</label>
+			<h:inputText id="name" value="#{personWebBean.person.name}" label="Nome"/>
+		</div>
+		<div>
+			<label for="surname">Cognome</label>
+			<h:inputText id="surname" value="#{personWebBean.person.surname}" label="Cognome"/>
+		</div>
+		<div>
+			<label for="dateOfBirth">Data di nascita</label>
+			<h:inputText id="dateOfBirth" value="#{personWebBean.person.dateOfBirth}" label="Data di nascita"/>
+		</div>
+		<div>
+			<h:selectOneMenu id="nation" value="#{personWebBean.person.nation}" label="Stato di nascita">
+				<f:selectItems value="#{personWebBean.nationList}" var="nation" itemLabel="#{nation.name}" itemValue="#{nation.name}" />
+			</h:selectOneMenu>
+		</div>
+		
+	</f:subview>
+	
+	<f:subview id="personListSubview">
+	
+	</f:subview>
+
+	<f:subview id="searchPersonSubview">
+	
+	</f:subview>
+
+	</h:form>
+	
+</h:body>
+</html>
