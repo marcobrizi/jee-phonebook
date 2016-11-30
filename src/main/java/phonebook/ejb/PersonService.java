@@ -29,6 +29,10 @@ public class PersonService {
 	public void addPerson(Person person) {
 		em.persist(person);
 	}
+	
+	public Person getPerson(Long id) {
+		return em.find(Person.class, id);
+	}
 
 	/**
 	 * search person filtering by name, surname or telephone presence

@@ -1,6 +1,5 @@
 package phonebook.models;
 
-import javax.jms.JMSSessionMode;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +14,7 @@ public class Telephone {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	private String number;
+	private Long number;
 	@ManyToOne
 	@JoinColumn(name="id_person", nullable=false)
 	@JsonIgnore
@@ -27,10 +26,10 @@ public class Telephone {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getNumber() {
+	public Long getNumber() {
 		return number;
 	}
-	public void setNumber(String number) {
+	public void setNumber(Long number) {
 		this.number = number;
 	}
 	public Person getPerson() {

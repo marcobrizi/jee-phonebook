@@ -10,16 +10,25 @@
 		</resource-bundle>
 	</application>
 
-<!-- 
+
 	<navigation-rule>
 		<from-view-id>/addperson.xhtml</from-view-id>
 		<navigation-case>
-			<from-action>#{personWebBean.search}</from-action>
-			<from-outcome>success</from-outcome>
-			<to-view-id>/result.xhtml</to-view-id>
+			<from-outcome>telephones</from-outcome>
+			<to-view-id>/addtelephone.xhtml</to-view-id>
 			<redirect></redirect>
-		</navigation-case> 
+		</navigation-case>
 	</navigation-rule>
- -->
+	
+	
+	<navigation-rule>
+		<from-view-id>/addtelephone.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/addperson.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+
 
 </faces-config>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+	<title>Gestione telefoni</title>
+	<style type="text/css">
+.ui-datatable-odd {
+	background-color: lightgray !important;
+}
+</style>
+</h:head>
+<h:body>
+
+	<f:metadata>
+		<f:viewParam name="personId" value="#{telephoneWebBean.personId}" />
+	</f:metadata>
+
+	<h:form id="form">
+
+		<ace:messages id="messages" initEffect="highlight" for="@inView"
+			changeEffect="puff" />
+
+		<f:subview id="addTelephoneSubview">
+			<h3>
+				Telefoni di <h:outputText value="#{telephoneWebBean.selectedPerson.name} #{telephoneWebBean.selectedPerson.surname}" />
+			</h3>
+
+			<ace:confirmationDialog id="confirmDialog" widgetVar="confirmation" modal="true"
+				message="Confermi la cancellazione?" header="Cancellazione"
+				closable="true" closeOnEscape="false">
+
+				<h:panelGrid width="100%" style="text-align: center;" columns="2" cellspacing="30">
+                    <h:commandButton value="Yes" immediate="true"
+                    	onclick="ice.ace.instance('form:addTelephoneSubview:confirmDialog').hide();"
+                    	actionListener="#{telephoneWebBean.deleteTelephone}">
+                    	<f:ajax execute="@this" render="@all" />
+                    </h:commandButton>
+                    <h:commandButton value="No" immediate="true"
+                    	onclick="ice.ace.instance('form:addTelephoneSubview:confirmDialog').hide();">
+                    	<f:ajax execute="@this" render="@all" />
+                    </h:commandButton>
+                </h:panelGrid>
+			</ace:confirmationDialog>
+
+			<h:panelGrid id="inputGrid" columns="1" width="100%"
+				styleClass="textEntryInputTable">
+
+				<ace:textEntry id="number" value="#{telephoneWebBean.numberInput}"
+					required="true" label="Numero" labelPosition="left" />
+
+				<h:commandButton value="AGGIUNGI"
+					action="#{telephoneWebBean.addTelephone}">
+					<f:ajax execute="@form" render="@all" />
+				</h:commandButton>
+			</h:panelGrid>
+
+
+			<ace:dataTable id="personTable" singleSort="true"
+				value="#{telephoneWebBean.telephoneListDM}" var="telephone">
+				<ace:column id="telephoneColumn" headerText="Telefono"
+					sortBy="#{telephone.number}">
+					<h:outputText id="telephoneCell" value="#{telephone.number}" />
+				</ace:column>
+				<ace:column id="deleteColumn">
+					<h:commandLink value="x"
+						actionListener="#{telephoneWebBean.selectTelephone}"
+						onclick="ice.ace.instance('form:addTelephoneSubview:confirmDialog').show();">
+						<f:ajax execute="@this" render="@all" />
+						
+					</h:commandLink>
+				</ace:column>
+			</ace:dataTable>
+
+
+			<h:commandButton value="CHIUDI" action="back" immediate="true" />
+		</f:subview>
+
+	</h:form>
+
+</h:body>
+</html>

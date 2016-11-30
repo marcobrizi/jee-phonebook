@@ -5,46 +5,99 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ace="http://www.icefaces.org/icefaces/components"
 	xmlns:icecore="http://www.icefaces.org/icefaces/core"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <h:head>
 	<title>Gestione persone</title>
+	<style type="text/css">
+        .ui-datatable-odd {
+            background-color:lightgray !important;
+        }
+    </style>
 </h:head>
 <h:body>
 
 	<h:form>
-	
-	<f:subview id="addPersonSubview">
-		<h3>Inserisci una persona:</h3>
-		<div>
-			<label for="name">Nome</label>
-			<h:inputText id="name" value="#{personWebBean.person.name}" label="Nome"/>
-		</div>
-		<div>
-			<label for="surname">Cognome</label>
-			<h:inputText id="surname" value="#{personWebBean.person.surname}" label="Cognome"/>
-		</div>
-		<div>
-			<label for="dateOfBirth">Data di nascita</label>
-			<h:inputText id="dateOfBirth" value="#{personWebBean.person.dateOfBirth}" label="Data di nascita"/>
-		</div>
-		<div>
-			<h:selectOneMenu id="nation" value="#{personWebBean.person.nation}" label="Stato di nascita">
-				<f:selectItems value="#{personWebBean.nationList}" var="nation" itemLabel="#{nation.name}" itemValue="#{nation.name}" />
-			</h:selectOneMenu>
-		</div>
+
+		<ace:messages id="messages" initEffect="highlight"
+	                  for="@inView" changeEffect="puff" />
+
+		<f:subview id="addPersonSubview">
+			<h3>Inserisci una persona:</h3>
+
+			<h:panelGrid id="inputGrid" columns="1" width="100%"
+				styleClass="textEntryInputTable">
+
+				<ace:textEntry id="name" value="#{personWebBean.nameInput}"
+					required="true" label="Nome" labelPosition="left" />
+				<ace:textEntry id="surname" value="#{personWebBean.surnameInput}"
+					required="true" label="Cognome" labelPosition="left" />
+				<ace:dateTimeEntry id="dateOfBirth"
+					value="#{personWebBean.birthInput}" pattern="dd/MM/yyyy"
+					timeZone="Italy" renderAsPopup="true"
+					label="Data di nascita" labelPosition="left" />
+
+				<ace:selectMenu id="nation" value="#{personWebBean.nationInput}"
+					label="Stato di nascita" labelPosition="left">
+					<f:selectItems value="#{personWebBean.nationItems}" />
+				</ace:selectMenu>
+
+				<h:commandButton value="SALVA" action="#{personWebBean.addPerson}" >
+					<f:ajax execute="name surname dateOfBirth nation" render="@all"/>
+				</h:commandButton>
+
+			</h:panelGrid>
+
 		
-	</f:subview>
-	
-	<f:subview id="personListSubview">
-	
-	</f:subview>
+			<h3>Elenco persone:</h3>
 
-	<f:subview id="searchPersonSubview">
-	
-	</f:subview>
+			<ace:dataTable id="personTable" value="#{personWebBean.personListDM}" var="person" singleSort="true">
+				<ace:column id="nameColumn" headerText="Nome" sortBy="#{person.name}">
+					<h:outputText id="nameCell" value="#{person.name}" />
+				</ace:column>
+				<ace:column id="surnameColumn" headerText="Cognome" sortBy="#{person.surname}">
+					<h:outputText id="surnameCell" value="#{person.surname}" />
+				</ace:column>
+				<ace:column id="dateBirthColumn" headerText="Data di nascita" sortBy="#{person.dateOfBirth}">
+					<h:outputText id="dateBirthCell" value="#{person.dateOfBirth}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				</ace:column>
+				<ace:column id="nationColumn" headerText="Stato di nascita" sortBy="#{person.nationOfBirth.name}">
+					<h:outputText id="nationCell" value="#{person.nationOfBirth.name}" />
+				</ace:column>
+				<ace:column id="telephoneColumn" headerText="Telefoni" sortBy="#{fn:length(person.telephones)}">
+					<h:link outcome="telephones">
+						<h:outputText id="telephoneCell" value="#{fn:length(person.telephones)}"/>
+						<f:param name="personId" value="#{person.id}"/>
+					</h:link>
+				</ace:column>
+			</ace:dataTable>
 
+
+			<h3>Cerca una persona:</h3>
+			
+			<h:panelGrid id="searchGrid" columns="1" width="100%"
+				styleClass="textEntryInputTable">
+
+				<ace:textEntry id="nameFilter" value="#{personWebBean.nameFilter}"
+					label="Nome" labelPosition="left" />
+				<ace:textEntry id="surnameFilter" value="#{personWebBean.surnameFilter}"
+					label="Cognome" labelPosition="left" />
+				
+				<h:panelGroup>
+					Con telefono <h:selectBooleanCheckbox id="hasTelephoneFilter" value="#{personWebBean.hasTelephoneFilter}" />
+				</h:panelGroup>
+	
+				<h:commandButton value="FILTRA" action="#{personWebBean.filter}" >
+					<f:ajax execute="nameFilter surnameFilter hasTelephoneFilter" render="@all"/>
+				</h:commandButton>
+
+			</h:panelGrid>
+		</f:subview>
+		
 	</h:form>
-	
+
 </h:body>
 </html>
